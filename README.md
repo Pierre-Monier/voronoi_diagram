@@ -1,6 +1,6 @@
 # voronoi_diagram
 
-![voronoi_diagram](https://github.com/Pierre-Monier/voronoi_diagrams/blob/main/screenshot/voronoi_diagram.png)
+![voronoi_diagram](https://github.com/Pierre-Monier/voronoi_diagram/blob/main/screenshot/voronoi_diagram.png)
 
 This repository is used to draw voronoi diagram. You just have to pass sites point and the size of your diagram.
 
