@@ -7,22 +7,8 @@ import 'dart:async';
 import 'package:flutter_rust_bridge/flutter_rust_bridge.dart';
 
 abstract class Native {
-  Future<Platform> platform({dynamic hint});
+  Future<List<List<String>>> getVoronoi(
+      {required List<String> points, required String boxsize, dynamic hint});
 
-  FlutterRustBridgeTaskConstMeta get kPlatformConstMeta;
-
-  Future<bool> rustReleaseMode({dynamic hint});
-
-  FlutterRustBridgeTaskConstMeta get kRustReleaseModeConstMeta;
-}
-
-enum Platform {
-  Unknown,
-  Android,
-  Ios,
-  Windows,
-  Unix,
-  MacIntel,
-  MacApple,
-  Wasm,
+  FlutterRustBridgeTaskConstMeta get kGetVoronoiConstMeta;
 }

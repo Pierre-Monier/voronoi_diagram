@@ -23,57 +23,81 @@ class NativeImpl implements Native {
   factory NativeImpl.wasm(FutureOr<WasmModule> module) =>
       NativeImpl(module as ExternalLibrary);
   NativeImpl.raw(this._platform);
-  Future<Platform> platform({dynamic hint}) =>
+  Future<List<List<String>>> getVoronoi(
+          {required List<String> points,
+          required String boxsize,
+          dynamic hint}) =>
       _platform.executeNormal(FlutterRustBridgeTask(
-        callFfi: (port_) => _platform.inner.wire_platform(port_),
-        parseSuccessData: _wire2api_platform,
-        constMeta: kPlatformConstMeta,
-        argValues: [],
+        callFfi: (port_) => _platform.inner.wire_get_voronoi(
+            port_,
+            _platform.api2wire_StringList(points),
+            _platform.api2wire_String(boxsize)),
+        parseSuccessData: _wire2api_list_StringList,
+        constMeta: kGetVoronoiConstMeta,
+        argValues: [points, boxsize],
         hint: hint,
       ));
 
-  FlutterRustBridgeTaskConstMeta get kPlatformConstMeta =>
+  FlutterRustBridgeTaskConstMeta get kGetVoronoiConstMeta =>
       const FlutterRustBridgeTaskConstMeta(
-        debugName: "platform",
-        argNames: [],
-      );
-
-  Future<bool> rustReleaseMode({dynamic hint}) =>
-      _platform.executeNormal(FlutterRustBridgeTask(
-        callFfi: (port_) => _platform.inner.wire_rust_release_mode(port_),
-        parseSuccessData: _wire2api_bool,
-        constMeta: kRustReleaseModeConstMeta,
-        argValues: [],
-        hint: hint,
-      ));
-
-  FlutterRustBridgeTaskConstMeta get kRustReleaseModeConstMeta =>
-      const FlutterRustBridgeTaskConstMeta(
-        debugName: "rust_release_mode",
-        argNames: [],
+        debugName: "get_voronoi",
+        argNames: ["points", "boxsize"],
       );
 
 // Section: wire2api
 
-  bool _wire2api_bool(dynamic raw) {
-    return raw as bool;
+  String _wire2api_String(dynamic raw) {
+    return raw as String;
   }
 
-  int _wire2api_i32(dynamic raw) {
+  List<String> _wire2api_StringList(dynamic raw) {
+    return (raw as List<dynamic>).cast<String>();
+  }
+
+  List<List<String>> _wire2api_list_StringList(dynamic raw) {
+    return (raw as List<dynamic>).map(_wire2api_StringList).toList();
+  }
+
+  int _wire2api_u8(dynamic raw) {
     return raw as int;
   }
 
-  Platform _wire2api_platform(dynamic raw) {
-    return Platform.values[raw];
+  Uint8List _wire2api_uint_8_list(dynamic raw) {
+    return raw as Uint8List;
   }
 }
 
 // Section: api2wire
 
+@protected
+int api2wire_u8(int raw) {
+  return raw;
+}
+
 class NativePlatform extends FlutterRustBridgeBase<NativeWire> {
   NativePlatform(ffi.DynamicLibrary dylib) : super(NativeWire(dylib));
 // Section: api2wire
 
+  @protected
+  ffi.Pointer<wire_uint_8_list> api2wire_String(String raw) {
+    return api2wire_uint_8_list(utf8.encoder.convert(raw));
+  }
+
+  @protected
+  ffi.Pointer<wire_StringList> api2wire_StringList(List<String> raw) {
+    final ans = inner.new_StringList_0(raw.length);
+    for (var i = 0; i < raw.length; i++) {
+      ans.ref.ptr[i] = api2wire_String(raw[i]);
+    }
+    return ans;
+  }
+
+  @protected
+  ffi.Pointer<wire_uint_8_list> api2wire_uint_8_list(Uint8List raw) {
+    final ans = inner.new_uint_8_list_0(raw.length);
+    ans.ref.ptr.asTypedList(raw.length).setAll(0, raw);
+    return ans;
+  }
 // Section: api_fill_to_wire
 
 }
@@ -114,33 +138,54 @@ class NativeWire implements FlutterRustBridgeWireBase {
   late final _store_dart_post_cobject = _store_dart_post_cobjectPtr
       .asFunction<void Function(DartPostCObjectFnType)>();
 
-  void wire_platform(
+  void wire_get_voronoi(
     int port_,
+    ffi.Pointer<wire_StringList> points,
+    ffi.Pointer<wire_uint_8_list> boxsize,
   ) {
-    return _wire_platform(
+    return _wire_get_voronoi(
       port_,
+      points,
+      boxsize,
     );
   }
 
-  late final _wire_platformPtr =
-      _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Int64)>>(
-          'wire_platform');
-  late final _wire_platform =
-      _wire_platformPtr.asFunction<void Function(int)>();
+  late final _wire_get_voronoiPtr = _lookup<
+      ffi.NativeFunction<
+          ffi.Void Function(ffi.Int64, ffi.Pointer<wire_StringList>,
+              ffi.Pointer<wire_uint_8_list>)>>('wire_get_voronoi');
+  late final _wire_get_voronoi = _wire_get_voronoiPtr.asFunction<
+      void Function(
+          int, ffi.Pointer<wire_StringList>, ffi.Pointer<wire_uint_8_list>)>();
 
-  void wire_rust_release_mode(
-    int port_,
+  ffi.Pointer<wire_StringList> new_StringList_0(
+    int len,
   ) {
-    return _wire_rust_release_mode(
-      port_,
+    return _new_StringList_0(
+      len,
     );
   }
 
-  late final _wire_rust_release_modePtr =
-      _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Int64)>>(
-          'wire_rust_release_mode');
-  late final _wire_rust_release_mode =
-      _wire_rust_release_modePtr.asFunction<void Function(int)>();
+  late final _new_StringList_0Ptr = _lookup<
+          ffi.NativeFunction<ffi.Pointer<wire_StringList> Function(ffi.Int32)>>(
+      'new_StringList_0');
+  late final _new_StringList_0 = _new_StringList_0Ptr
+      .asFunction<ffi.Pointer<wire_StringList> Function(int)>();
+
+  ffi.Pointer<wire_uint_8_list> new_uint_8_list_0(
+    int len,
+  ) {
+    return _new_uint_8_list_0(
+      len,
+    );
+  }
+
+  late final _new_uint_8_list_0Ptr = _lookup<
+      ffi.NativeFunction<
+          ffi.Pointer<wire_uint_8_list> Function(
+              ffi.Int32)>>('new_uint_8_list_0');
+  late final _new_uint_8_list_0 = _new_uint_8_list_0Ptr
+      .asFunction<ffi.Pointer<wire_uint_8_list> Function(int)>();
 
   void free_WireSyncReturnStruct(
     WireSyncReturnStruct val,
@@ -155,6 +200,20 @@ class NativeWire implements FlutterRustBridgeWireBase {
           'free_WireSyncReturnStruct');
   late final _free_WireSyncReturnStruct = _free_WireSyncReturnStructPtr
       .asFunction<void Function(WireSyncReturnStruct)>();
+}
+
+class wire_uint_8_list extends ffi.Struct {
+  external ffi.Pointer<ffi.Uint8> ptr;
+
+  @ffi.Int32()
+  external int len;
+}
+
+class wire_StringList extends ffi.Struct {
+  external ffi.Pointer<ffi.Pointer<wire_uint_8_list>> ptr;
+
+  @ffi.Int32()
+  external int len;
 }
 
 typedef DartPostCObjectFnType = ffi.Pointer<

@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_rust_bridge_template/flutter_rust_bridge_template.dart';
 
@@ -11,6 +13,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
       theme: ThemeData(
         primarySwatch: Colors.blue,
@@ -20,70 +23,60 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class MyHomePage extends StatefulWidget {
+class MyHomePage extends StatelessWidget {
   const MyHomePage({Key? key, required this.title}) : super(key: key);
-
   final String title;
 
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
+  List<Offset> _getGeneratorPoints({
+    required int numberOfPoints,
+    required Size size,
+  }) {
+    final points = <Offset>[];
 
-class _MyHomePageState extends State<MyHomePage> {
-  late Future<Platform> platform;
-  late Future<bool> isRelease;
+    for (var i = 0; i < numberOfPoints; i++) {
+      points.add(
+        Offset(
+          (Random().nextDouble() * size.width).roundToDouble(),
+          (Random().nextDouble() * size.height).roundToDouble(),
+        ),
+      );
+    }
 
-  @override
-  void initState() {
-    super.initState();
-    platform = api.platform();
-    isRelease = api.rustReleaseMode();
+    return points;
   }
 
   @override
   Widget build(BuildContext context) {
+    final screenSize = context.screenSize;
+    final generatorPoints =
+        _getGeneratorPoints(numberOfPoints: 10, size: screenSize);
+
     return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-      ),
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text("You're running on"),
-            FutureBuilder<List<dynamic>>(
-              future: Future.wait([platform, isRelease]),
-              builder: (context, snap) {
-                final style = Theme.of(context).textTheme.headline4;
-                if (snap.error != null) {
-                  debugPrint(snap.error.toString());
-                  return Tooltip(
-                    message: snap.error.toString(),
-                    child: Text('Unknown OS', style: style),
-                  );
-                }
+          child: FutureBuilder<List<List<Offset>>>(
+        future:
+            getVoronoiDiagram(sites: generatorPoints, diagramBound: screenSize),
+        builder: (context, snapshot) {
+          final data = snapshot.data;
 
-                final data = snap.data;
-                if (data == null) return const CircularProgressIndicator();
+          if (data == null) {
+            return const CircularProgressIndicator();
+          }
 
-                final Platform platform = data[0];
-                final release = data[1] ? 'Release' : 'Debug';
-                final text = const {
-                      Platform.Android: 'Android',
-                      Platform.Ios: 'iOS',
-                      Platform.MacApple: 'MacOS with Apple Silicon',
-                      Platform.MacIntel: 'MacOS',
-                      Platform.Windows: 'Windows',
-                      Platform.Unix: 'Unix',
-                      Platform.Wasm: 'the Web',
-                    }[platform] ??
-                    'Unknown OS';
-                return Text('$text ($release)', style: style);
-              },
-            )
-          ],
-        ),
-      ),
+          return CustomPaint(
+            size: screenSize,
+            painter: VoronoiDiagramPainter(
+              generatorPoints: generatorPoints,
+              voronoiDiagram: data,
+            ),
+          );
+        },
+      )),
     );
   }
+}
+
+extension on BuildContext {
+  Size get screenSize =>
+      Size(MediaQuery.of(this).size.width, MediaQuery.of(this).size.height);
 }

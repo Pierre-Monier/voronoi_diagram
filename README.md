@@ -1,9 +1,57 @@
-# flutter_rust_bridge_template
+# voronoi_diagram
 
-This repository serves as a template for Flutter projects calling into native Rust
-libraries via `flutter_rust_bridge`.
+![voronoi_diagram](https://github.com/Pierre-Monier/voronoi_diagrams/blob/main/screenshot/voronoi_diagram.png)
 
-## Getting Started
+This repository is used to draw voronoi diagram. You just have to pass sites point and the size of your diagram.
+
+```dart
+getVoronoiDiagram(sites: sites, diagramBound: diagramBound)
+```
+
+This return a `Future<List<List<Offset>>>`, each `List<Offset>` represent a voronoi cell. Then you can draw your voronoi diagram easily with a `CustomPainter`, e.g
+
+```dart
+for (final voronoiCell in voronoiDiagram) {
+    canvas.drawPoints(
+    PointMode.polygon,
+    voronoiCell,
+    Paint()
+        ..color = Colors.red
+        ..strokeWidth = 2,
+    );
+}
+```
+
+There is also a default `VoronoiDiagramPainter` to display the diagram on the screen. You can use it like this inside a `CustomPaint` widget :
+
+```dart
+CustomPaint(
+        size: benchmarkData.diagramSize,
+        painter: VoronoiDiagramPainter(
+            generatorPoints: benchmarkData.generatorPoints,
+            voronoiDiagram: data,
+    ),
+)
+```
+
+
+## Benchmark
+
+It get the drawable voronoi diagram representation in **~115ms**, with **10000 sites** and a diagram **size of 400x400**
+
+It's calculated in "real life" context, i.e in a flutter app
+
+you can run the benchmark with the `benchmark.sh` script, in the example folder.
+
+## How does it works ?
+
+Dart code take inputs, then it use dart:ffi to calculate the voronoi diagram with the rust language, then the result is pass back to the dart side.
+
+The rust side is using an implementation of the Fortune's algorithm. If you want to know more about this amazing topic, I recommand to read [this amazing article](https://jacquesheunis.com/post/fortunes-algorithm/)
+
+## Contribution
+
+To start working on the project, you must check the following.
 
 To begin, ensure that you have a working installation of the following items:
 - [Flutter SDK](https://docs.flutter.dev/get-started/install)
@@ -17,47 +65,8 @@ To begin, ensure that you have a working installation of the following items:
 echo "ANDROID_NDK=.." >> ~/.gradle/gradle.properties
 ```
 
-This template use [just](https://github.com/casey/just) to get things done. You should download it.
-
-It also use [flutter_rust_bridge_codegen](https://github.com/fzyzcjy/flutter_rust_bridge), so you should have it install on your machine. You can install it with `cargo install flutter_rust_bridge_codegen`
-
-You also need to make sure that you have [llvm](https://releases.llvm.org/download.html) install.
-
-You can install it as follow:
-
-- ubuntu/linux
-
-```
-sudo apt-get install libclang-dev
-```
-
-- Windows
-
-```
-winget install -e --id LLVM.LLVM
-```
-
-- MacOs
-
-```
-brew install llvm
-```
-
 - [Web dependencies](http://cjycode.com/flutter_rust_bridge/template/setup_web.html) for the Web
 
 Then go ahead and run `flutter run`! When you're ready, refer to our documentation
 [here](https://fzyzcjy.github.io/flutter_rust_bridge/index.html)
 to learn how to write and use binding code.
-
-Once you have edited `api.rs` to incorporate your own Rust code, the bridge files `bridge_definitions.dart` and `bridge_generated.dart` are generated using the following command:
-
-### Generate
-
-If you have already install `just`, you can just run `just` command line and it will build everythings for you. You can check the detail of what the `just` command does in the `justfile`. To run a specific task, use `just <taskname>` 
-
-
-## Scaffolding in existing projects
-
-If you would like to generate boilerplate for using `flutter_rust_bridge` in your existing projects,
-check out the [`flutter_rust_bridge` brick](https://brickhub.dev/bricks/flutter_rust_bridge/)
-for more details.
