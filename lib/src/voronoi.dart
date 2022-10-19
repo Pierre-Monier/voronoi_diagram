@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_rust_bridge_template/src/ffi.dart';
+import 'package:voronoi_diagram/src/ffi.dart';
 
 Future<List<List<Offset>>> getVoronoiDiagram(
     {required List<Offset> sites, required Size diagramBound}) async {

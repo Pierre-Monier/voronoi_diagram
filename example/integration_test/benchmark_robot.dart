@@ -3,8 +3,8 @@
 import 'dart:math' hide log;
 
 import 'package:flutter/material.dart';
-import 'package:flutter_rust_bridge_template/flutter_rust_bridge_template.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:voronoi_diagram/voronoi_diagram.dart';
 
 import 'voronoi_custom_paint.dart';
 

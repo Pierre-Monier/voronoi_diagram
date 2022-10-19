@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:flutter_rust_bridge_template/src/voronoi_painter.dart';
+import 'package:voronoi_diagram/src/voronoi_painter.dart';
 
 class BenchmarkApp extends StatelessWidget {
   const BenchmarkApp({Key? key, required this.benchmarkData}) : super(key: key);
