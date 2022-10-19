@@ -10,9 +10,12 @@ gen:
         --dart-decl-output lib/src/bridge_definitions.dart
 
 build:
-    ./script/build_android.sh
-    ./script/build_ios.sh
     ./script/build_macos.sh
+    ./script/build_ios.sh sim
+    ./script/build_ios.sh x86
+    ./script/build_ios.sh aarch64
+    ./script/build_android.sh armeabi
+    ./script/build_android.sh arm64
 
 lint:
     cd native && cargo fmt
@@ -21,8 +24,3 @@ lint:
 clean:
     flutter clean
     cd native && cargo clean
-    
-serve *args='':
-    flutter pub run flutter_rust_bridge:serve {{args}}
-
-# vim:expandtab:sw=4:ts=4

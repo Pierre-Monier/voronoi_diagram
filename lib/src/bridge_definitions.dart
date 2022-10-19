@@ -6,7 +6,7 @@ import 'dart:convert';
 import 'dart:async';
 import 'package:flutter_rust_bridge/flutter_rust_bridge.dart';
 
-abstract class Native {
+abstract class VoronoiDiagram {
   Future<List<List<String>>> getVoronoi(
       {required List<String> points, required String boxsize, dynamic hint});
 
