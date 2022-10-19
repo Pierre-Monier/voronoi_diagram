@@ -2,7 +2,7 @@
 
 ![voronoi_diagram](https://github.com/Pierre-Monier/voronoi_diagram/blob/main/screenshot/voronoi_diagram.png)
 
-This repository is used to draw voronoi diagram. You just have to pass sites point and the size of your diagram.
+This repository is used to draw voronoi diagrams. You just have to pass sites point and the size of your diagram.
 
 ```dart
 getVoronoiDiagram(sites: sites, diagramBound: diagramBound)
