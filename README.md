@@ -65,8 +65,4 @@ To begin, ensure that you have a working installation of the following items:
 echo "ANDROID_NDK=.." >> ~/.gradle/gradle.properties
 ```
 
-- [Web dependencies](http://cjycode.com/flutter_rust_bridge/template/setup_web.html) for the Web
-
-Then go ahead and run `flutter run`! When you're ready, refer to our documentation
-[here](https://fzyzcjy.github.io/flutter_rust_bridge/index.html)
-to learn how to write and use binding code.
+If you are struggling during the set up, please check the [flutter_rust_bridge documenation](https://cjycode.com/flutter_rust_bridge/)

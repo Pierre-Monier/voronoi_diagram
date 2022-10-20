@@ -3,6 +3,7 @@ description: Draw voronoi diagram for given sites and diagram size
 version: 1.0.0
 homepage: https://github.com/Pierre-Monier/voronoi_diagram
 repository: https://github.com/Pierre-Monier/voronoi_diagram
+issue_tracker: https://github.com/Pierre-Monier/voronoi_diagram/issues
 
 environment:
   sdk: ">=2.17.5 <3.0.0"
