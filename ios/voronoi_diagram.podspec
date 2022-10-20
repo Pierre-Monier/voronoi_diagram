@@ -22,7 +22,6 @@ A new Flutter FFI plugin project.
   s.dependency 'Flutter'
   s.platform = :ios, '9.0'
 
-  # Flutter.framework does not contain a i386 slice.
   s.vendored_frameworks = 'voronoi_diagram.xcframework'
   s.swift_version = '5.0'
 end

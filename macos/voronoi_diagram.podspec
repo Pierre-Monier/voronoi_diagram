@@ -24,7 +24,6 @@ Pod::Spec.new do |s|
     s.platform = :osx, '10.11'
     s.swift_version = '5.0'
 
-    # use the universal binary created by the lipo command
     s.vendored_libraries = 'libs/libvoronoi_diagram.dylib'
   end
   
