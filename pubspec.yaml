@@ -1,6 +1,6 @@
 name: voronoi_diagram
 description: Draw voronoi diagram for given sites and diagram size
-version: 1.0.0
+version: 1.0.0+1
 homepage: https://github.com/Pierre-Monier/voronoi_diagram
 repository: https://github.com/Pierre-Monier/voronoi_diagram
 issue_tracker: https://github.com/Pierre-Monier/voronoi_diagram/issues
