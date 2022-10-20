@@ -1,29 +1,30 @@
 #!/bin/bash
 
-# This script builds the native library for Android.
-# You must have a define $ANDROID_NDK_HOME environment variable.
-
-get_target() {
-    if [ "$1" = "sim" ]; then
-        TARGET="aarch64-apple-ios-sim"
-    elif [ "$1" = "x86" ]; then
-        TARGET="x86_64-apple-ios"
-    else
-        TARGET="aarch64-apple-ios"
-    fi
-}
-
+export IPHONEOS_DEPLOYMENT_TARGET=11.0
+LIBNAME="voronoi_diagram"
 
 build() {
-    LIBNAME="voronoi_diagram"
     echo "Building ios libs"
 
-    get_target $1
     cd native
-    rustup target add $TARGET
+ 
+    rustup target add aarch64-apple-ios aarch64-apple-ios-sim x86_64-apple-ios
+    cargo build --target aarch64-apple-ios --release
+    cargo build --target aarch64-apple-ios-sim --release
+    cargo build --target x86_64-apple-ios --release
 
-    cargo build --target $TARGET --release
-    mv "target/$TARGET/release/lib$LIBNAME.a" "../ios/libs/$TARGET/lib$LIBNAME.a"
+    lipo "target/aarch64-apple-ios-sim/release/lib$LIBNAME.a" "target/x86_64-apple-ios/release/lib$LIBNAME.a" -output "target/aarch64-apple-ios-sim/lib$LIBNAME.a" -create
+
+    cd ../ios
+
+    xcodebuild \
+        -create-xcframework \
+        -library ../native/target/aarch64-apple-ios/release/lib$LIBNAME.a \
+        -library ../native/target/aarch64-apple-ios-sim/lib$LIBNAME.a \
+        -output $LIBNAME.xcframework 
+
+    zip -r $LIBNAME_ios.xcframework.zip $LIBNAME.xcframework
+    rm $LIBNAME_ios.xcframework.zip
 }
 
-build $1
+build

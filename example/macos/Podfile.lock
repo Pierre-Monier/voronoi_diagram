@@ -1,0 +1,22 @@
+PODS:
+  - FlutterMacOS (1.0.0)
+  - voronoi_diagram (0.0.1):
+    - FlutterMacOS
+
+DEPENDENCIES:
+  - FlutterMacOS (from `Flutter/ephemeral`)
+  - voronoi_diagram (from `Flutter/ephemeral/.symlinks/plugins/voronoi_diagram/macos`)
+
+EXTERNAL SOURCES:
+  FlutterMacOS:
+    :path: Flutter/ephemeral
+  voronoi_diagram:
+    :path: Flutter/ephemeral/.symlinks/plugins/voronoi_diagram/macos
+
+SPEC CHECKSUMS:
+  FlutterMacOS: ae6af50a8ea7d6103d888583d46bd8328a7e9811
+  voronoi_diagram: 56c9c6222785bbc3f399cfc7ca1fc3a0e87af3cb
+
+PODFILE CHECKSUM: 6eac6b3292e5142cfc23bdeb71848a40ec51c14c
+
+COCOAPODS: 1.11.3

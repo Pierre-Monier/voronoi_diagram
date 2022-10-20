@@ -11,9 +11,7 @@ gen:
 
 build:
     ./script/build_macos.sh
-    ./script/build_ios.sh sim
-    ./script/build_ios.sh x86
-    ./script/build_ios.sh aarch64
+    ./script/build_ios.sh
     ./script/build_android.sh armeabi
     ./script/build_android.sh arm64
 

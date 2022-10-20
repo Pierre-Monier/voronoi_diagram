@@ -23,11 +23,6 @@ A new Flutter FFI plugin project.
   s.platform = :ios, '9.0'
 
   # Flutter.framework does not contain a i386 slice.
-  s.pod_target_xcconfig = {
-    'DEFINES_MODULE' => 'YES',
-    'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'i386',
-    'OTHER_LDFLAGS[sdk=iphoneos*]' => '-force_load $(PODS_TARGET_SRCROOT)/libs/aarch64-apple-ios/libvoronoi_diagram.a',
-    'OTHER_LDFLAGS[sdk=iphonesimulator*]' => '-force_load $(PODS_TARGET_SRCROOT)/libs/aarch64-apple-ios-sim/libvoronoi_diagram.a'
-  }
+  s.vendored_frameworks = 'voronoi_diagram.xcframework'
   s.swift_version = '5.0'
 end
